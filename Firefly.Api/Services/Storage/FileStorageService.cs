@@ -72,8 +72,7 @@ public class FileStorageService : IFileStorageService
 
             using var request = new HttpRequestMessage(HttpMethod.Delete, deleteEndpoint);
             request.Headers.Add("apikey", _settings.Key);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _settings.Key);
-
+            
             var payload = new { prefixes = new[] { storagePath } };
             request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
@@ -97,7 +96,6 @@ public class FileStorageService : IFileStorageService
 
         using var request = new HttpRequestMessage(HttpMethod.Post, uploadUrl);
         request.Headers.Add("apikey", _settings.Key);
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _settings.Key);
         request.Headers.Add("x-upsert", "true");
 
         using var content = new StreamContent(stream);

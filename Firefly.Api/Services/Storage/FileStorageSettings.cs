@@ -6,6 +6,6 @@
 
         public string Url { get; set; } = string.Empty;
         public string Key { get; set; } = string.Empty;
-        public string Bucket { get; set; } = "images"; 
+        public string Bucket { get; set; } = "uploads"; 
     }
 }

@@ -188,6 +188,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IProfileService, ProfileService>();
+
+        services.Configure<FileStorageSettings>(configuration.GetSection(FileStorageSettings.SectionName));
         services.AddHttpClient<IFileStorageService, FileStorageService>();
 
         return services;
