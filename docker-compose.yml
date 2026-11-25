@@ -1,0 +1,46 @@
+networks:
+  dev:
+    driver: bridge
+    
+services:
+  db:
+    container_name: firefly.api-postgres
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - dev
+    restart: unless-stopped
+
+
+  firefly.api:
+    container_name: firefly.api-app
+    depends_on:
+      db:
+        condition: service_started 
+    env_file:
+      - .env
+    environment:
+      - IS_IN_CONTAINER=true
+    image: ${DOCKER_REGISTRY-}fireflyapi
+    build:
+      context: .
+      dockerfile: Firefly.Api/Dockerfile
+    networks:
+      - dev
+
+
+volumes:
+  db-data: {}
